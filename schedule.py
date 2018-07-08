@@ -7,12 +7,14 @@
 class Scheduler(object):
     """ Schedules the workouts."""
 
-    def __init__(self_):
+    def __init__(self):
         self.workout_choices = ['w1', 'w2', 'w3']
         self.done_workouts = []
 
-    def plan_next_days(self, num_of_days, workout_choices, done_workouts):
+    def plan_next_days(self, num_of_days, workout_choices, done_workouts=[]):
         """ Method to plan the next days workouts"""
+        #last_workout = ''
+        planned_workouts = []
         if not done_workouts:
             last_workout = self.get_last_workout(workout_choices)
             planned_workouts.append(last_workout)
@@ -20,6 +22,7 @@ class Scheduler(object):
             last_workout = self.get_last_workout(workout_choices, done_workouts)
         for i in range(1, num_of_days):
             planned_workouts.append(self.schedule(last_workout, workout_choices, planned_workouts))
+        return planned_workouts
 
     def get_last_workout(workout_choices, done_workouts=[]):
         """ Method to get the last workout.
@@ -51,12 +54,19 @@ class Scheduler(object):
         next_workout = ''
         workouts = iter(workout_choices)
         # check if last_workout exists in the list.
+        #TODO have some serious rework here.
         if last_workout in workout_choices:
             # if it is, then take the next one.
             next_workout = workouts.next()
-            # add it to planned_workouts and
-            planned_workouts.append(next_workout)
             # set it as the last_workout
             return next_workout
 
 
+def main():
+    s = Scheduler()
+    choices = ['w1', 'w2', 'w3']
+    planned_workouts = s.plan_next_days(7, choices)
+    print planned_workouts
+
+if __name__ == '__main__':
+    main()
